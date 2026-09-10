@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — interface
+   TIDEWRIGHT — interface
    A warm, salt-bleached instrument panel laid over a very dark sea.
    ========================================================================== */
 
@@ -187,13 +187,11 @@ kbd{
 .cr-empty{color:#5d6773;font-style:italic;font-family:var(--f-disp)}
 
 /* ---------------------------------------------------------------- settings */
-/* These are read *over* something live — the shore, another card, or a
+/* These three are read *over* something live — the shore, another card, or a
    running game with its whole HUD lit underneath. .screen paints nothing, so
    without their own darkness everything beneath prints straight through the
-   glass and you appear to be looking at two menus at once. The trade dialog
-   needs it most: it is the only card opened with the workbench, the hint line
-   and the probe chip all still lit. */
-#settings,#codex,#howto,#trade,#curvePick{background:rgba(4,6,10,.80)}
+   glass and you appear to be looking at two menus at once. */
+#settings,#codex,#howto{background:rgba(4,6,10,.80)}
 
 .set-card{width:min(560px,94vw);max-height:86vh;overflow:auto}
 .set-grid{display:flex;flex-direction:column;gap:14px}
@@ -585,12 +583,3 @@ body.orbiting canvas#gl{cursor:grabbing}
 .trade-quote b{color:var(--sand);font-weight:500}
 .trade-quote .bad,.bad{color:var(--bad)}
 @media (max-width:900px){ .pick-lists{grid-template-columns:1fr} }
-
-/* ── Jubilados Club ── */
-.menu-head .eyebrow .tick{color:var(--pons);font-weight:600;letter-spacing:.3em}
-.menu-foot a{color:var(--pons);text-decoration:none;letter-spacing:.12em}
-.menu-foot a:hover{text-decoration:underline}
-.prelaunch{margin-top:14px;padding:11px 14px;border-radius:9px;font-size:12.5px;line-height:1.55;color:#c9b995;
-  background:rgba(240,192,120,.08);border:1px solid rgba(240,192,120,.28)}
-.prelaunch b{color:var(--gold-hot)}
-.prelaunch code{font-family:var(--f-mono);font-size:11px;color:var(--pons)}

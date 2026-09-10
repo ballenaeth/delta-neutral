@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — audio.js
+   TIDEWRIGHT — audio.js
    Everything you hear is synthesised at runtime: surf from three bands of
    filtered noise driven by the actual swash phase, wind, gulls, the tools,
    and a slow modal pad through a procedurally-generated reverb. No samples.

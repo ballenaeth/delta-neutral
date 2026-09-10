@@ -1,6 +1,6 @@
 /* ============================================================================
-   JUBILADOS CLUB — content.js
-   The nine siestas, the tools, the codex. Everything a designer would touch.
+   TIDEWRIGHT — content.js
+   The nine tides, the tools, the codex. Everything a designer would touch.
    ========================================================================== */
 'use strict';
 
@@ -45,56 +45,56 @@ const I = {
 T.ICONS = I;
 
 /* ─────────────────────────── tools ─────────────────────────── */
-/* `moves`: what the tool does to the amount of $SAND on the beach.
-   -1 takes it away (into your bag) · +1 puts it back · 0 leaves it alone and
+/* `moves`: what the tool does to the amount of sand in the world.
+   -1 takes it away (into your pail) · +1 puts it back · 0 leaves it alone and
    changes what the sand is *like*. Shown in the interface, because the
    difference between Water and Drip is exactly this and nothing else. */
 T.TOOLS = [
   { id:'shovel', key:'1', name:'Shovel',   icon:I.shovel, mode:1, unlock:1, moves:-1,
-    rad:1.5, str:0.62, short:'Digs. Fills your bag.',
-    desc:'Lifts sand off the beach and into your bag — wetness and all. Dig damp sand and the bag stays damp. Digging is how you get material, and how you get a moat. Yes, you still have to work a little. It is a club, not a charity.' },
+    rad:1.5, str:0.62, short:'Digs a hole. Fills your pail.',
+    desc:'Lifts sand out of the world and into your pail — wetness and all. Dig damp sand and the pail stays damp. Digging is how you get material, and how you get a moat.' },
   { id:'pail',   key:'2', name:'Pail',     icon:I.pail,   mode:2, unlock:1, moves:1,
-    rad:1.3, str:0.55, short:'Pours a heap from your bag.',
-    desc:'Throws real sand, which falls and piles where it lands. It arrives as wet as the bag says it is — check the reading before you ape it onto the ground.' },
+    rad:1.3, str:0.55, short:'Pours a heap from your pail.',
+    desc:'Throws real sand, which falls and piles where it lands. It arrives as wet as the pail says it is — check the reading before you build with it.' },
   { id:'pat',    key:'3', name:'Pat',      icon:I.pat,    mode:3, unlock:1, moves:0,
-    rad:1.1, str:0.55, short:'Diamond hands. Packs it. Adds nothing.',
-    desc:'Compaction. Packed sand holds a far steeper face and survives the red candles. The most under-used tool on any beach and the whole difference between a jubilado and a tourist.' },
+    rad:1.1, str:0.55, short:'Packs it down. No sand added.',
+    desc:'Compaction. Packed sand holds a far steeper face and resists the sea. The most under-used tool on any beach.' },
   { id:'water',  key:'4', name:'Water',    icon:I.water,  mode:4, unlock:1, moves:0,
-    rad:1.6, str:0.60, short:'Wets sand already there. Adds none.',
-    desc:'Raises the moisture of the sand under the brush so the grains bridge and it can stand steeper. It does not build anything — for that, use the Pail or Drip. Think of it as liquidity.' },
+    rad:1.6, str:0.60, short:'Wets sand that is already there. Adds none.',
+    desc:'Raises the moisture of the sand under the brush so the grains bridge and it can stand steeper. It does not build anything — for that, use the Pail or Drip.' },
   { id:'bucket', key:'5', name:'Mould',    icon:I.bucket, mode:10, unlock:1, moves:1,
     rad:1.0, str:1.0, short:'Hold to fill. Click to turn out.',
-    desc:'Hold on damp sand to scoop the mould full, then aim and click to turn it out. What comes out is exactly as wet as what went in. Turn out a dry one and it collapses like a Tuesday launch.' },
+    desc:'Hold on damp sand to scoop the mould full, then aim and click to turn it out. What comes out is exactly as wet as what went in.' },
   { id:'wall',   key:'6', name:'Rampart',  icon:I.wall,   mode:6, unlock:2, moves:1,
     rad:0.9, str:0.9, short:'Drag to raise a wall.',
-    desc:'Raises a wall to the height you started at. A long packed berm on the seaward side is a seawall. A seawall is a stop-loss you can stand on.' },
+    desc:'Raises a wall to the height you started at. A long packed berm on the seaward side is a seawall.' },
   { id:'carve',  key:'7', name:'Carve',    icon:I.carve,  mode:5, unlock:3, moves:-1,
     rad:0.55, str:0.62, short:'Cuts down to where you first pressed.',
-    desc:'A blade, not a scoop. Press on the level you want and drag: everything you cross comes down to that height, and the cut edge is packed hard so it stands instead of slumping back. Gateways, stairs, a chiringuito terrace. Damp sand takes a crisp edge; dry sand crumbles.' },
+    desc:'A blade, not a scoop. Press on the level you want and drag: everything you cross comes down to that height, and the cut edge is packed hard so it stands instead of slumping back. Press on the sand beside a wall and drag through it for a gateway. Damp sand takes a crisp edge; dry sand crumbles to a slope.' },
   { id:'level',  key:'8', name:'Level',    icon:I.level,  mode:8, unlock:3, moves:0,
     rad:1.8, str:0.6, short:'Flattens to where you first pressed.',
-    desc:'Drives the ground toward the height under your first click. Courtyards, terraces, a flat footing for a tower, somewhere to put the sunbed.' },
+    desc:'Drives the ground toward the height under your first click. Courtyards, terraces, a flat footing for a tower.' },
   { id:'drip',   key:'9', name:'Drip',     icon:I.drip,   mode:7, unlock:4, moves:1,
     rad:0.34, str:0.75, short:'Dribbles very wet sand into spires.',
-    desc:'Takes sand from your bag, adds a splash on the way out, and lets it fall a blob at a time. Grows the knobbled gothic spires only a beach can make — Gaudí with a hangover. A dry bag makes a poor spire. Unlike Water, this one builds.' },
+    desc:'Takes sand from your pail, adds a splash on the way out, and lets it fall a blob at a time. Grows the knobbled gothic spires only a beach can make. A dry pail makes a poor spire. Unlike Water, this one builds.' },
   { id:'adorn',  key:'0', name:'Adorn',    icon:I.adorn,  mode:0, unlock:5, moves:0,
     rad:0.5, str:1, short:'Sets a toy down.',
-    desc:'Sombrillas, boats, bottles. They lean as the sand moves under them, and go over when the water reaches them. Cosmetic. Like most of crypto.' }
+    desc:'Adornments lean as the sand moves under them, and go over when the water reaches them.' }
 ];
 
 T.ADORN = [
-  { id:'flag',     name:'Pennant',      icon:I.flagI,     scale:1.0 },
-  { id:'parasol',  name:'Sombrilla',    icon:I.parasolI,  scale:1.0 },
-  { id:'pinwheel', name:'Pinwheel',     icon:I.pinwheelI, scale:1.0 },
-  { id:'lantern',  name:'Farolillo',    icon:I.lampI,     scale:1.0 },
-  { id:'pail',     name:'Bucket & spade', icon:I.pailI,   scale:1.0 },
-  { id:'boat',     name:'The yacht',    icon:I.boatI,     scale:1.0 },
-  { id:'shell',    name:'Scallop',      icon:I.shellI,    scale:1.0 },
-  { id:'star',     name:'Starfish',     icon:I.starI,     scale:1.0 },
-  { id:'wood',     name:'Driftwood',    icon:I.woodI,     scale:1.0 },
-  { id:'kelp',     name:'Kelp',         icon:I.kelpI,     scale:1.0 },
-  { id:'bottle',   name:'Empty caña',   icon:I.bottleI,   scale:1.0 },
-  { id:'cairn',    name:'Cairn',        icon:I.cairnI,    scale:1.0 }
+  { id:'flag',     name:'Pennant',   icon:I.flagI,     scale:1.0 },
+  { id:'parasol',  name:'Parasol',   icon:I.parasolI,  scale:1.0 },
+  { id:'pinwheel', name:'Pinwheel',  icon:I.pinwheelI, scale:1.0 },
+  { id:'lantern',  name:'Lantern',   icon:I.lampI,     scale:1.0 },
+  { id:'pail',     name:'Pail & spade', icon:I.pailI,  scale:1.0 },
+  { id:'boat',     name:'Toy boat',  icon:I.boatI,     scale:1.0 },
+  { id:'shell',    name:'Scallop',   icon:I.shellI,    scale:1.0 },
+  { id:'star',     name:'Starfish',  icon:I.starI,     scale:1.0 },
+  { id:'wood',     name:'Driftwood', icon:I.woodI,     scale:1.0 },
+  { id:'kelp',     name:'Kelp',      icon:I.kelpI,     scale:1.0 },
+  { id:'bottle',   name:'Bottle',    icon:I.bottleI,   scale:1.0 },
+  { id:'cairn',    name:'Cairn',     icon:I.cairnI,    scale:1.0 }
 ];
 
 /* ─────────────────────────── the moulds ───────────────────────────
@@ -113,199 +113,195 @@ T.MOULDS = [
   { id:9, name:'Starfish',     icon:I.mStarfish,rad:1.20, h:0.34, detail:0,  wet:0.38 }
 ];
 
-/* ─────────────────────────── the nine siestas ───────────────────────────
-   The campaign. Nine tides across one long European afternoon, from the
-   14:00 lunch to the last drink on the terrace. Your score is PENSIÓN:
-   sand you left standing above the high-water line, weighted by how well
-   you packed it. Loose sand is paper hands and counts for nothing.       */
+/* ─────────────────────────── the nine tides ─────────────────────────── */
 function O(text, fn) { return { text, check: fn }; }
 
 T.TIDES = [
-  { n:1, name:'The Long Lunch',
-    verse:'“The first tide only wants to know you turned up. Build something small and honest before the second course. It will take a corner anyway; that is how it says buenas.”',
+  { n:1, name:'First Salt',
+    verse:'“The first tide only wants to know that you are there. Give it something small and honest. It will take a corner of it anyway; that is how it says hello.”',
     low:-0.34, high:0.30, build:170, flood:62, amp:0.55, sun:[62,205], cloud:0.55,
     objs:[
-      O('Leave 320 of Pensión standing', s => s.worth >= 320),
+      O('Leave 320 of Remembrance standing', s => s.worth >= 320),
       O('Keep three quarters of it through the flood', s => s.kept >= 0.75)
     ] },
-  { n:2, name:'Siesta',
-    verse:'“Everyone else is answering emails. You are asleep under a sombrilla with a mould full of damp sand. Turn out a dry tower and the beach will show you what it thinks of your work ethic.”',
+  { n:2, name:'The Bucket Turns',
+    verse:'“A mould is a promise between you and the water in the sand. Break the promise — turn out a dry tower — and the sand will show you exactly what it thinks of you.”',
     low:-0.32, high:0.44, build:170, flood:66, amp:0.68, sun:[52,176], cloud:0.6,
     objs:[
       O('Stand something 1.4 m above the high-water line', s => s.peakAbove >= 1.4),
-      O('Leave 520 of Pensión standing', s => s.worth >= 520),
+      O('Leave 520 of Remembrance standing', s => s.worth >= 520),
       O('Keep seven tenths through the flood', s => s.kept >= 0.70)
     ] },
-  { n:3, name:'Dig the Moat',
-    verse:'“Every ditch is also a bank. The spoil has to go somewhere, and where you put it is the whole of the craft. Dig toward the sea; build away from it. Same as a portfolio.”',
+  { n:3, name:'A Ditch and a Bank',
+    verse:'“Every ditch is also a bank. The spoil has to go somewhere, and where you put it is the whole of the craft. Dig toward the sea; build away from it.”',
     low:-0.30, high:0.56, build:180, flood:72, amp:0.80, sun:[43,150], cloud:0.7,
     objs:[
       O('Cut a moat the water actually fills', s => s.moatFilled),
-      O('Leave 760 of Pensión standing', s => s.worth >= 760),
+      O('Leave 760 of Remembrance standing', s => s.worth >= 760),
       O('Keep seven tenths through the flood', s => s.kept >= 0.70)
     ] },
-  { n:4, name:'Diamond Hands',
-    verse:'“There is a sound packed sand makes under the flat of your hand — a dull, close sound, like a door shutting on a margin call. Pat until you hear it everywhere. This is the tide that separates jubilados from tourists.”',
+  { n:4, name:'The Packing Tide',
+    verse:'“There is a sound packed sand makes under the flat of your hand — a dull, close sound, like a door shutting in another room. Work until you hear it everywhere.”',
     low:-0.28, high:0.66, build:180, flood:78, amp:0.94, sun:[33,127], cloud:0.75,
     objs:[
       O('Have 45 m³ of properly packed sand', s => s.packed >= 45),
-      O('Leave 1000 of Pensión standing', s => s.worth >= 1000),
+      O('Leave 1000 of Remembrance standing', s => s.worth >= 1000),
       O('Keep two thirds through the flood', s => s.kept >= 0.66)
     ] },
-  { n:5, name:'Golden Visa',
-    verse:'“At the fifth tide the sun comes down onto the water and the whole coast turns the colour of a struck euro. Do not stop to post about it. New York opens in twenty minutes and it is bringing water.”',
+  { n:5, name:'Gold Water',
+    verse:'“At the fifth tide the sun comes down onto the water and the whole shore turns the colour of a struck coin. Do not stop to look. The sixth tide is already coming.”',
     low:-0.26, high:0.76, build:185, flood:84, amp:1.08, sun:[23,108], cloud:0.85,
     objs:[
       O('Stand something 1.9 m above the high-water line', s => s.peakAbove >= 1.9),
-      O('Leave 1350 of Pensión standing', s => s.worth >= 1350),
+      O('Leave 1350 of Remembrance standing', s => s.worth >= 1350),
       O('Keep two thirds through the flood', s => s.kept >= 0.66)
     ] },
-  { n:6, name:'Farolillos',
-    verse:'“The club lit lanterns along its sea wall every evening for four hundred summers. On the last evening they lit them too. That is the part the chart cannot take back.”',
+  { n:6, name:'The Lanterns',
+    verse:'“Vellamar lit lamps along its sea wall every evening for four hundred years. On the last evening they lit them too. That is the part the sea cannot take back.”',
     low:-0.24, high:0.86, build:190, flood:90, amp:1.22, sun:[13,94], cloud:0.8,
     objs:[
       O('Set six adornments and keep four upright', s => s.propsAlive >= 4),
-      O('Leave 1700 of Pensión standing', s => s.worth >= 1700),
+      O('Leave 1700 of Remembrance standing', s => s.worth >= 1700),
       O('Keep three fifths through the flood', s => s.kept >= 0.60)
     ] },
-  { n:7, name:'The American Open',
-    verse:'“15:30 in Madrid. The sets come in threes and the third one is a liar. Build for the third one. Build for the fourth, too; there is always someone in Connecticut with leverage.”',
+  { n:7, name:'Swell from the West',
+    verse:'“Weather now. The sets come in threes and the third one is a liar. Build for the third one.”',
     low:-0.22, high:0.95, build:195, flood:96, amp:1.48, sun:[5,84], cloud:1.0,
     objs:[
-      O('Leave 1900 of Pensión standing', s => s.worth >= 1900),
+      O('Leave 1900 of Remembrance standing', s => s.worth >= 1900),
       O('Have 85 m³ of packed sand', s => s.packed >= 85),
       O('Keep three fifths through the flood', s => s.kept >= 0.60)
     ] },
-  { n:8, name:'Sobremesa',
-    verse:'“You will notice, around the eighth tide, that you have stopped thinking of it as sand. Good. It stopped thinking of you as exit liquidity some time ago.”',
+  { n:8, name:'Dusk Water',
+    verse:'“You will notice, around the eighth tide, that you have stopped thinking of it as sand. Good. It stopped thinking of you as a stranger some time ago.”',
     low:-0.20, high:1.04, build:200, flood:104, amp:1.66, sun:[-4,76], cloud:0.9,
     objs:[
-      O('Leave 2300 of Pensión standing', s => s.worth >= 2300),
+      O('Leave 2300 of Remembrance standing', s => s.worth >= 2300),
       O('Stand something 2.4 m above the high-water line', s => s.peakAbove >= 2.4),
       O('Keep over half through the flood', s => s.kept >= 0.55)
     ] },
-  { n:9, name:'Jubilación',
-    verse:'“Nine is the tide that comes in the dark, and it comes all the way. Whatever is left standing when the water turns is not yours any more and never was. It belongs to the club. Hold the shape. Hold the bag.”',
+  { n:9, name:'The Ninth Tide',
+    verse:'“Nine is the tide that comes in the dark, and it comes all the way. Whatever is left standing when the water turns is not yours any more and never was. It belongs to the shape. Hold the shape.”',
     low:-0.18, high:1.14, build:215, flood:120, amp:1.85, sun:[-13,68], cloud:0.7,
     objs:[
-      O('Leave 2700 of Pensión standing', s => s.worth >= 2700),
+      O('Leave 2700 of Remembrance standing', s => s.worth >= 2700),
       O('Keep half of it through the dark water', s => s.kept >= 0.50),
-      O('Still have a farolillo upright at the end', s => s.lanternAlive)
+      O('Still have a lantern upright at the end', s => s.lanternAlive)
     ] }
 ];
 
-/* ─────────────────────────── $SAND beach ───────────────────────────
+/* ─────────────────────────── the curve ───────────────────────────
    One tide with no clock. Where the water sits between `low` and `high`
-   is decided by the $SAND chart on pons, not by a timer — see pons.js
+   is decided by the chart of a pons launch, not by a timer — see pons.js
    and Game.tick(). The numbers are the seventh tide's: weather, but
    survivable if you packed.                                              */
 T.CURVE_TIDE = {
-  n: 0, name: '$SAND Beach', verse: '', low: -0.30, high: 0.95, build: 1e9, flood: 1e9,
+  n: 0, name: 'The Curve', verse: '', low: -0.30, high: 0.95, build: 1e9, flood: 1e9,
   amp: 1.40, sun: [30, 140], cloud: 0.6, objs: []
 };
 
 /* ─────────────────────────── codex ─────────────────────────── */
 T.CODEX = [
-  { id:'c1', tide:1, title:'On the club',
-    src:'The Jubilado’s Primer, opening',
+  { id:'c1', tide:1, title:'On the country that was here',
+    src:'The Tidewright’s Primer, opening',
     body:[
-      'Somewhere around 2024 a generation looked at the forty-year plan — the standing desk, the 401k, the 6 a.m. cold plunge — and said no. They took the severance, the airdrop, or the one good trade, and they went to the coast. They retired at thirty with nothing but a bag and a sombrilla. They called it euromaxxing. The rest of the internet called it a phase.',
-      'The Jubilados Club is what they built with the afternoons. It is a beach. Every member gets the same sand, the same sea, and the same rule: whatever you leave standing when the tide comes in is your pensión. Whatever you didn’t pack, the water keeps.',
-      'It did not end in a crash. It never ends. The tide is the chart, and the chart is other people, and other people are always selling.'
+      'Vellamar was a low country and it knew it. Its cities were built on banks the rivers had made, and every spring the banks were mended by hand, and every autumn the sea took a little back, and this arrangement held for something like nine hundred years.',
+      'It did not end in a storm. The chronicles are clear about that, and stubborn about it, and there is no reason to disbelieve them. It ended on a still night with a flat sea. The banks were sound. The lamps were lit. And in the morning there was water where there had been a country, and none of the words for it worked any more.',
+      'What is left is this beach, which is made of Vellamar, ground fine.'
     ] },
   { id:'c2', tide:2, title:'Why the mould must be wet',
-    src:'The Jubilado’s Primer, second lesson',
+    src:'The Tidewright’s Primer, second lesson',
     body:[
       'Take dry sand between finger and thumb and it will not hold. Add a little water and it becomes, briefly, a solid — not because the water glues it, but because each drop pulls at the grains around it and every grain is being squeezed toward its neighbours by a thousand tiny meniscuses.',
-      'Add more water and the drops touch each other and stop pulling. The squeeze goes. The sand runs. This is also what happens to a chart with too much liquidity and no conviction.',
+      'Add more water and the drops touch each other and stop pulling. The squeeze goes. The sand runs.',
       'So: damp, not soaked. There is no way to learn where that line is except by crossing it, which you will, repeatedly, and then one day not.'
     ] },
   { id:'c3', tide:3, title:'The purpose of a moat',
-    src:'Field notes, terrace of the chiringuito',
+    src:'Field notes, ninth novena',
     body:[
       'A moat does not stop water. Nothing stops water. A moat spends it.',
-      'A wave arriving at a wall gives that wall all its energy at once. A wave arriving at a ditch first has to fill the ditch, and filling a ditch is work, and the work comes out of the wave. What reaches your wall afterward is slower, thinner and much stupider. Like a dump that has already eaten three bids.',
+      'A wave arriving at a wall gives that wall all its energy at once. A wave arriving at a ditch first has to fill the ditch, and filling a ditch is work, and the work comes out of the wave. What reaches your wall afterward is slower, thinner and much stupider.',
       'The corollary that catches everyone: a moat that drains inland is a delivery service. Cut your outlets seaward.'
     ] },
   { id:'c4', tide:4, title:'On the angle of repose',
-    src:'The Jubilado’s Primer, third lesson',
+    src:'The Tidewright’s Primer, third lesson',
     body:[
       'Pour dry sand onto a table. It makes a cone. Pour more and it makes a bigger cone with exactly the same sides. You cannot make it steeper. That angle — about thirty-three degrees in this sand — is not a suggestion. It is the sand telling you the only shape it can be.',
-      'Everything you build here is an argument with that angle. Water is one argument. The flat of your hand is another. The sea is the rebuttal. Leverage is not an argument; it is a confession.'
+      'Everything you build here is an argument with that angle. Water is one argument. The flat of your hand is another. The sea is the rebuttal.'
     ] },
   { id:'c5', tide:5, title:'The colour of the fifth evening',
     src:'Marginalia, unsigned',
     body:[
-      'They say that on the fifth tide the light comes in flat off the water and for about eleven minutes every wet surface on the beach behaves like a mirror, and for those eleven minutes you can see every green candle you ever sold too early reflected in the sand.',
-      'I have watched for it nine times. I have never seen candles. I have seen a great deal of extremely good light, which is, I have come to think, the same claim made honestly.'
+      'They say that on the fifth tide of a novena the light comes in flat off the water and for about eleven minutes every wet surface on the beach behaves like a mirror, and for those eleven minutes you can see the drowned streets reflected in the sand — not the sand, the reflection, which is a distinction the writers of these things enjoy far too much.',
+      'I have watched for it nine times. I have never seen streets. I have seen a great deal of extremely good light, which is, I have come to think, the same claim made honestly.'
     ] },
   { id:'c6', tide:6, title:'The lamplighters',
-    src:'Club ledger (fragment)',
+    src:'Vellamar, civic record (fragment)',
     body:[
       'Item: to the lamplighters of the sea wall, for oil, for the quarter — paid.',
-      'Item: for the replacement of eleven farolillos lost to weather — paid.',
-      'Item: for the same, on the night of the big dump — the entry is finished, in a different hand, with the word *paid*.',
+      'Item: for the replacement of eleven lamps lost to weather — paid.',
+      'Item: for the same, on the night of the flood — the entry is finished, in a different hand, with the word *paid*.',
       'It is the only kindness in the whole ledger and someone went back for it.'
     ] },
   { id:'c7', tide:7, title:'Reading a set',
-    src:'Field notes, 15:30 CET',
+    src:'Field notes, ninth novena',
     body:[
       'Waves do not arrive evenly. They arrive in sets, and within a set they grow, and the last one of a set is the one that finds the base of your wall.',
-      'You can hear it coming about four seconds before it arrives, because the water in front of it goes quiet — it is being pulled backward into the face of the thing. If the shore hisses and then stops hissing, stop patting and start watching. If the order book goes quiet at the open, same.'
+      'You can hear it coming about four seconds before it arrives, because the water in front of it goes quiet — it is being pulled backward into the face of the thing. If the shore hisses and then stops hissing, stop patting and start watching.'
     ] },
   { id:'c8', tide:8, title:'Undermining',
-    src:'The Jubilado’s Primer, last lesson',
+    src:'The Tidewright’s Primer, last lesson',
     body:[
       'Nothing here is knocked down. Everything here falls down.',
-      'The sea does not hit your tower; it takes away a handful at the bottom of your tower, and then the tower is standing on a slope steeper than sand can be, and then it is not standing. Nobody rugs a project from the top.',
+      'The sea does not hit your tower; it takes away a handful at the bottom of your tower, and then the tower is standing on a slope steeper than sand can be, and then it is not standing.',
       'Which is to say: defend the feet. The top of a sandcastle has never once been the problem.'
     ] },
   { id:'c9', tide:9, title:'What the ninth tide is for',
-    src:'The Jubilado’s Primer, closing',
+    src:'The Tidewright’s Primer, closing',
     body:[
-      'You will be told that a jubilado works to preserve something. That is a misunderstanding, and a comfortable one.',
-      'Nothing you make here survives. Nine tides is not a long time and the ninth is not the last one; there is a tenth, and it is tomorrow, and it opens at 15:30.',
-      'What a jubilado preserves is the *shape* — the fact that this arrangement of grains was possible, was chosen, was made by somebody on purpose on an ordinary afternoon while everyone else was in a stand-up. The sea can have the sand. It has never once managed to take the fact.',
-      'Hold the shape. Then let go of it. Then order another caña and do it again.'
+      'You will be told that a tidewright works to preserve something. That is a misunderstanding, and a comfortable one.',
+      'Nothing you make here survives. Nine tides is not a long time and the ninth is not the last one; there is a tenth, and it is tomorrow, and no one is watching that one.',
+      'What a tidewright preserves is the *shape* — the fact that this arrangement of grains was possible, was chosen, was made by somebody on purpose on an ordinary afternoon. The sea can have the sand. It has never once managed to take the fact.',
+      'Hold the shape. Then let go of it. Then do it again.'
     ] },
   { id:'cx1', tide:0, hidden:true, title:'On spires',
     src:'Unlocked: you built a drip spire above two metres',
     body:[
       'The dripped spire is the only part of this craft that is not architecture. You cannot plan one. You hold very wet sand above a point and you let go of it a little at a time and what accumulates is a tower designed entirely by surface tension and gravity, with you as a delivery mechanism.',
-      'It is also, structurally, absurd — a stack of blobs held together by water that is actively leaving. Which is why the good ones are always finished in a hurry and always slightly wrong, and why nobody has ever built the same one twice. Every memecoin is a drip spire.'
+      'It is also, structurally, absurd — a stack of blobs held together by water that is actively leaving. Which is why the good ones are always finished in a hurry and always slightly wrong, and why nobody has ever built the same one twice.'
     ] },
-  { id:'cx3', tide:0, hidden:true, title:'On $SAND',
-    src:'Unlocked: you built on the $SAND chart',
+  { id:'cx3', tide:0, hidden:true, title:'On the curve',
+    src:'Unlocked: you built on a pons launch',
     body:[
-      'The club has a token now. It was launched on a curve: the first buyers pay almost nothing and each one after them pays a little more, and the whole of it is written down on a chain that does not forget and does not care.',
-      'The water on this beach is not the moon’s. It is everyone who has ever sold. When $SAND stands at its recent high the sea is out and the beach is yours; when it falls the water comes up the shore by the same fraction, and it takes — as it always takes — the loose sand first, and the feet before the towers.',
-      'When enough has been raised the launch graduates: the pool is locked and cannot be pulled. The old members call this slack water. It is the only kind that lasts, and it is the only kind you have to earn.'
+      'There is a newer country than Vellamar and it sinks more often. It is launched on a curve: the first buyers pay almost nothing and each one after them pays a little more, and the whole of it is written down on a chain that does not forget.',
+      'The water on that beach is not the moon’s. It is everyone who has ever sold. When the price stands at its recent high the sea is out and the sand is yours; when it falls the water comes up the shore by the same fraction, and it takes — as it always takes — the loose sand first, and the feet before the towers.',
+      'When enough has been raised the launch graduates: the pool is locked and cannot be pulled. The chronicles call this slack water, and it is the only kind that lasts.'
     ] },
-  { id:'cx2', tide:0, hidden:true, title:'On the bag',
-    src:'Unlocked: you emptied your bag',
+  { id:'cx2', tide:0, hidden:true, title:'On the pail',
+    src:'Unlocked: you emptied your pail',
     body:[
       'There is no sand in this bay that you did not take from somewhere else in this bay.',
-      'Beginners dig a borrow pit behind the castle, where it is convenient, and are then surprised when the sea comes up the pit like a stair and takes the castle from behind. This is also how most people lose a bag.',
+      'Beginners dig a borrow pit behind the castle, where it is convenient, and are then surprised when the sea comes up the pit like a stair and takes the castle from behind.',
       'Dig where you want a hole. There is always somewhere you want a hole.'
     ] }
 ];
 
 /* ─────────────────────────── the looks ─────────────────────────── */
 T.LOOKS = [
-  { id:0, name:'Costa',         note:'the beach as it is' },
-  { id:1, name:'Chiringuito',   note:'painted, inked, cosy' },
-  { id:2, name:'Visit Spain',   note:'screen-printed poster' },
-  { id:3, name:'Catastro',      note:'a survey chart of the sand' },
-  { id:4, name:'Abuela’s Sofa', note:'a craft-fair diorama' },
-  { id:5, name:'Cala',          note:'a foot under clear water' },
-  { id:6, name:'Vespa',         note:'enamel on pressed tin' },
-  { id:7, name:'Azulejo',       note:'woodblock, ragged key' },
-  { id:8, name:'Benidorm, January', note:'the beach out of season' }
+  { id:0, name:'Salt & Light',  note:'the shore as it is' },
+  { id:1, name:'Bucket & Spade',note:'painted, inked, cosy' },
+  { id:2, name:'Marram',        note:'screen-printed poster' },
+  { id:3, name:'Ordnance',      note:'a survey chart of the sand' },
+  { id:4, name:'Felt & Flannel',note:'a craft-fair diorama' },
+  { id:5, name:'Rockpool',      note:'a foot under clear water' },
+  { id:6, name:'Tin Toy',       note:'enamel on pressed tin' },
+  { id:7, name:'Sōsaku Hanga',  note:'woodblock, ragged key' },
+  { id:8, name:'Midwinter',     note:'the beach out of season' }
 ];
 
 /* ─────────────────────────── the day ───────────────────────────
    A beach that faces west: the sun comes up behind the dunes and goes down
-   over the water, which is the entire reason anyone retires here.        */
+   over the water, which is the entire reason anyone builds here.            */
 const DAWN = 0.235, DUSK = 0.795;
 T.sunFromDay = function (t) {
   const p = (t - DAWN) / (DUSK - DAWN);
@@ -321,10 +317,10 @@ T.dayPhase = function (t) {
   if (e < -8) return 'deep night';
   if (e < 0)  return rising ? 'first light' : 'dusk';
   if (e < 8)  return rising ? 'sunrise' : 'sunset';
-  if (e < 20) return rising ? 'early light' : 'golden hour';
-  if (e < 42) return rising ? 'morning' : 'sobremesa';
-  if (e < 60) return rising ? 'late morning' : 'siesta';
-  return 'lunch';
+  if (e < 20) return rising ? 'early light' : 'gold water';
+  if (e < 42) return rising ? 'morning' : 'afternoon';
+  if (e < 60) return rising ? 'late morning' : 'high afternoon';
+  return 'midday';
 };
 T.DAY_SPEEDS = [
   { name: 'held',  s: 0 },
@@ -339,12 +335,12 @@ T.grade = function (s) {
   pts += Math.min(s.worth / Math.max(s.target, 1), 1.6) * 55;
   pts += Math.min(s.kept, 1) * 32;
   pts += s.objsDone / Math.max(s.objsTotal, 1) * 13;
-  if (pts >= 96) return { g: 'S', line: 'The shape held. All of it. Retired.' };
-  if (pts >= 84) return { g: 'A', line: 'The water went back out and found nothing to say. Jubilado.' };
-  if (pts >= 68) return { g: 'B', line: 'It took a corner. It always takes a corner. Still up.' };
-  if (pts >= 50) return { g: 'C', line: 'Standing, mostly. The feet went first. Paper feet.' };
-  if (pts >= 30) return { g: 'D', line: 'The sea has opinions about your foundations. So does the chart.' };
-  return { g: 'E', line: 'It is all still here. It is just flat now. ngmi.' };
+  if (pts >= 96) return { g: 'S', line: 'The shape held. All of it.' };
+  if (pts >= 84) return { g: 'A', line: 'The water went back out and found nothing to say.' };
+  if (pts >= 68) return { g: 'B', line: 'It took a corner. It always takes a corner.' };
+  if (pts >= 50) return { g: 'C', line: 'Standing, mostly. The feet went first.' };
+  if (pts >= 30) return { g: 'D', line: 'The sea has opinions about your foundations.' };
+  return { g: 'E', line: 'It is all still here. It is just flat now.' };
 };
 
 })(TW);

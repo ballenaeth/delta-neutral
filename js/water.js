@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — water.js
+   TIDEWRIGHT — water.js
    The sea. Gerstner sum with real shoaling (amplitude gains as the bottom
    comes up, the crest gets depth-limited, and the excess becomes foam), a
    camera-centred exponentially-warped grid so the same 147k vertices give

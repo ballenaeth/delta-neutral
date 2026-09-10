@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — sim.js
+   TIDEWRIGHT — sim.js
    The sand. A continuous heightfield solved on the GPU: eight-neighbour
    avalanche relaxation against a *variable* angle of repose, capillary
    moisture, water-film shallow flow, and wave fluidisation.

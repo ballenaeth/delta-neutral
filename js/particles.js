@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — particles.js
+   TIDEWRIGHT — particles.js
    Six thousand particles integrated entirely on the GPU with transform
    feedback: thrown sand, spray off the breaking crest, splash, and the dust
    that lifts off a dry wall the moment before it fails. They collide with the

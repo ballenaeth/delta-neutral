@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — core.js
+   TIDEWRIGHT — core.js
    Math, WebGL2 helpers, async GPU readback, storage. No dependencies.
    ========================================================================== */
 'use strict';

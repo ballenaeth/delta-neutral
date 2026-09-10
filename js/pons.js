@@ -1,7 +1,6 @@
 /* ============================================================================
-   JUBILADOS CLUB — pons.js
-   The chart is the tide. $SAND — or, before launch, any pons v2 launch on
-   Robinhood Chain (4663) — read
+   TIDEWRIGHT — pons.js
+   The chart is the tide. A pons v2 launch on Robinhood Chain (4663), read
    straight off the bonding curve with raw JSON-RPC — no wallet library, no
    ABI library, in keeping with the rest of the game. The trust path is the
    chain: nothing here depends on the pons website being up.
@@ -71,7 +70,7 @@ const hexToUtf8 = h => {
 
 /* ─────────────────────────── rpc ─────────────────────────── */
 let rpcId = 1, rpcUrl = RPC, triedProxy = false;
-async function rpc(method, params, _retry) {
+async function rpc(method, params) {
   const body = JSON.stringify({ jsonrpc: '2.0', id: rpcId++, method, params: params || [] });
   let r;
   try {
@@ -85,27 +84,9 @@ async function rpc(method, params, _retry) {
     }
     throw e;
   }
-  if (!r.ok) {
-    /* a public node throttles bursts; one polite retry covers it */
-    if (!_retry) { await new Promise(res => setTimeout(res, 400 + Math.random() * 400)); return rpc(method, params, true); }
-    throw new Error('rpc ' + r.status);
-  }
   const j = await r.json();
-  if (j.error) {
-    if (!_retry && /limit|throttl|too many|busy/i.test(j.error.message || '')) {
-      await new Promise(res => setTimeout(res, 500 + Math.random() * 500)); return rpc(method, params, true);
-    }
-    throw new Error(j.error.message || 'rpc error');
-  }
+  if (j.error) throw new Error(j.error.message || 'rpc error');
   return j.result;
-}
-/* run async jobs a few at a time — the picker asks a lot of questions at once */
-async function pool(items, n, fn) {
-  const out = new Array(items.length); let i = 0;
-  await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
-    while (i < items.length) { const k = i++; out[k] = await fn(items[k], k); }
-  }));
-  return out;
 }
 const call = (to, data) => rpc('eth_call', [{ to, data }, 'latest']);
 const callU = async (to, data) => { const w = words(await call(to, data)); return w.length ? w[0] : 0n; };
@@ -115,7 +96,7 @@ const state = {
   ok: false, err: '', token: '', curve: '', symbol: '—', name: '', decimals: 18,
   supply: 0n, quoteReserve: 0n, tokenReserve: 0n, sellable: 0n, reserved: 0n,
   realQuote: 0n, threshold: 0n, feeBps: 0n, creatorTaxBps: 0n,
-  pairToken: WETH, isNative: true, quoteDecimals: 18, quoteSymbol: 'ETH',
+  pairToken: WETH, isNative: true, quoteDecimals: 18,
   graduated: false, readyToGraduate: false,
   price: 0, peak: 0, drawdown: 0, flood: 0, progress: 0, mcap: 0,
   account: '', balance: 0n, bagFrac: 0, quoteBalance: 0n,
@@ -128,8 +109,8 @@ const emit = (ev, a) => (listeners[ev] || []).forEach(fn => { try { fn(a); } cat
 
 /* the peak the drawdown is measured from: the highest price in the last
    WINDOW minutes, so a token that pumped and settled gets its low water back */
-let WINDOW_MS = ((T.SAND && T.SAND.windowMin) || 20) * 60 * 1000;
-let FLOOD_AT = (T.SAND && T.SAND.floodAt) || 0.30;   // this much drawdown from the peak is full flood
+let WINDOW_MS = 20 * 60 * 1000;
+let FLOOD_AT = 0.30;            // this much drawdown from the peak is full flood
 const opt = new URLSearchParams(location.search);
 if (opt.get('window')) WINDOW_MS = Math.max(1, +opt.get('window')) * 60 * 1000;
 if (opt.get('flood')) FLOOD_AT = T.clamp(+opt.get('flood'), 0.03, 0.95);
@@ -179,15 +160,7 @@ async function setToken(addr) {
   ]);
   state.symbol = sym || '???'; state.name = name; state.decimals = Number(dec); state.supply = sup;
   state.isNative = isNative;
-  /* v2 launches pair against ETH or an approved token (USDG, say) — every
-     quote figure is shown in whichever it is, at its own decimals */
-  if (isNative || !isAddr(state.pairToken) || /^0x0{40}$/.test(state.pairToken)) {
-    state.isNative = true; state.quoteDecimals = 18; state.quoteSymbol = 'ETH';
-  } else {
-    state.quoteDecimals = Number(await callU(state.pairToken, SEL.decimals).catch(() => 18n));
-    state.quoteSymbol = await call(state.pairToken, SEL.symbol).then(decodeString).catch(() => 'QUOTE') || 'QUOTE';
-  }
-  state.thresholdF = Number(state.threshold) / 10 ** state.quoteDecimals;
+  if (!isNative) state.quoteDecimals = Number(await callU(state.pairToken, SEL.decimals).catch(() => 18n));
   await poll();
   start();
   return state;
@@ -373,17 +346,15 @@ async function recent(want) {
     from = lo - 1n; tries++;
   }
   found = found.slice(0, want);
-  await pool(found, 4, async f => {
+  await Promise.all(found.map(async f => {
     f.symbol = await call(f.token, SEL.symbol).then(decodeString).catch(() => '???');
     f.name = await call(f.token, SEL.name).then(decodeString).catch(() => '');
     try {
-      const rq = await callU(f.curve, SEL.realQuoteReserve);
-      const th = await callU(f.curve, SEL.graduationThreshold);
-      const g = await callU(f.curve, SEL.graduated);
+      const [rq, th, g] = await Promise.all([callU(f.curve, SEL.realQuoteReserve), callU(f.curve, SEL.graduationThreshold), callU(f.curve, SEL.graduated)]);
       f.progress = th > 0n ? T.clamp(Number(rq) / Number(th), 0, 1) : 0;
       f.graduated = g !== 0n;
     } catch (e) { f.progress = 0; }
-  });
+  }));
   return found;
 }
 
@@ -391,24 +362,12 @@ async function recent(want) {
 const fmt = {
   price: p => {
     if (!p) return '—';
-    const u = ' ' + state.quoteSymbol;
-    if (p >= 1) return p.toFixed(4) + u;
+    if (p >= 1) return p.toFixed(4) + ' ETH';
     const e = Math.floor(Math.log10(p));
-    if (e >= -6) return p.toFixed(Math.min(10, 2 - e)) + u;
-    return p.toExponential(2) + u;
+    if (e >= -6) return p.toFixed(Math.min(10, 2 - e)) + ' ETH';
+    return p.toExponential(2) + ' ETH';
   },
-  /* an amount of the quote asset, given as a float in whole units */
-  q: v => {
-    const u = ' ' + state.quoteSymbol;
-    if (v >= 1000) return Math.round(v).toLocaleString('en-GB') + u;
-    if (v >= 100) return v.toFixed(1) + u;
-    if (v >= 1) return v.toFixed(state.quoteDecimals >= 18 ? 3 : 2) + u;
-    if (v >= 0.001) return v.toFixed(4) + u;
-    return v.toPrecision(2) + u;
-  },
-  /* the same, from a BigInt in the quote asset's own decimals */
-  qb: b => fmt.q(Number(b) / 10 ** state.quoteDecimals),
-  eth: v => fmt.q(v),
+  eth: v => v >= 100 ? v.toFixed(1) + ' ETH' : v >= 1 ? v.toFixed(3) + ' ETH' : v >= 0.001 ? v.toFixed(4) + ' ETH' : (v * 1e6).toFixed(0) + ' gwei·k',
   big: (v, dec) => {
     const n = Number(v) / 10 ** (dec === undefined ? state.decimals : dec);
     if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';

@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — post.js
+   TIDEWRIGHT — post.js
    HDR → bloom pyramid → volumetric-ish sun shafts → optional bokeh → ACES
    with a warm/cool split grade → vignette, grain, chromatic aberration → FXAA.
    ========================================================================== */

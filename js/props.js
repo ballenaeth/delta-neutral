@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — props.js
+   TIDEWRIGHT — props.js
    Everything you can set down on the sand: pennants, scallops, starfish,
    driftwood, and the little lanterns that only earn their keep once the sun
    has gone. All geometry is generated in code — there isn't an asset file in

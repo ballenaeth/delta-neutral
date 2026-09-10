@@ -1,4 +1,4 @@
-/* Tiny static file server for Jubilados Club.  node server.js  →  http://localhost:5173
+/* Tiny static file server for TIDEWRIGHT.  node server.js  →  http://localhost:5173
    Also forwards POST /rpc to Robinhood Chain, for a browser that will not talk
    to the RPC directly. The game tries the chain first and only falls back here. */
 const http = require('http');
@@ -53,4 +53,4 @@ http.createServer((req, res) => {
     });
     res.end(data);
   });
-}).listen(PORT, '127.0.0.1', () => console.log('JUBILADOS CLUB on http://localhost:' + PORT + '  (rpc → ' + RPC + ')'));
+}).listen(PORT, '127.0.0.1', () => console.log('TIDEWRIGHT on http://localhost:' + PORT + '  (rpc → ' + RPC + ')'));

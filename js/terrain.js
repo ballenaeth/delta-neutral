@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — terrain.js
+   TIDEWRIGHT — terrain.js
    The sand surface. A vertex-ID generated grid (no buffers at all) displaced
    by the simulation texture, shaded with:
      · Oren–Nayar diffuse, because sand is the roughest thing on a beach

@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — glsl.js
+   TIDEWRIGHT — glsl.js
    The shared GLSL library. Every shader in the game #includes this by
    string-concatenation, so the beach profile, the wave field and the sky are
    *literally the same functions* on the simulation side and the render side.

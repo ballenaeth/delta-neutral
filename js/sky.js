@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — sky.js
+   TIDEWRIGHT — sky.js
    A single-scattering Rayleigh + Mie atmosphere, raymarched into a lat-long
    LUT once a frame. Everything else in the game — the sea's reflection, the
    ambient on a sand wall, the fog on the headland — reads that one texture,

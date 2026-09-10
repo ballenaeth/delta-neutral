@@ -1,5 +1,5 @@
 /* ============================================================================
-   JUBILADOS CLUB — game.js
+   TIDEWRIGHT — game.js
    Camera, input, the tide state machine, scoring, the interface, and the frame.
    ========================================================================== */
 'use strict';
@@ -248,8 +248,6 @@ class Game {
   /* ─────────────────────── interface ─────────────────────── */
   initUI() {
     const self = this;
-    /* every full-bleed card, looked up once — overlayOpen() asks every frame */
-    this.screens = $$('.screen');
 
     /* palette */
     const pal = $('#palette');
@@ -340,10 +338,10 @@ class Game {
     $('#pSave').onclick = () => self.saveCastle();
     $('#pLoad').onclick = () => self.loadCastle();
     $('#setWipe').onclick = () => {
-      if (confirm('Rug yourself? All progress and saved castles go. The bag stays on-chain, obviously.')) {
+      if (confirm('Erase all progress and saved castles?')) {
         T.store.del('tw.save'); T.store.del('tw.castle'); T.store.del('tw.taught');
         self.save = { tide: 1, best: 0, codex: [], totals: 0 };
-        self.toast('The club has forgotten you. Welcome back, tourist.', 'bad');
+        self.toast('The shore has forgotten you.', 'bad');
       }
     };
     $('#pExit').onclick = () => self.setPhoto(false);
@@ -462,9 +460,9 @@ class Game {
     if (T.store.get('tw.taught', false)) return;
     T.store.set('tw.taught', true);
     const lines = [
-      ['Dig first. Every grain you build with comes out of a hole you made. No airdrops here.', 'lore'],
+      ['Dig first. Every grain you build with comes out of a hole you made.', 'lore'],
       ['Wet sand stands, dry sand slumps. The readout at your cursor tells you which you have.', ''],
-      ['Hold the Mould on damp sand to fill it, then click where you want it. Pat it after. Diamond hands.', 'good']
+      ['Hold the Mould on damp sand to fill it, then click where you want it.', 'good']
     ];
     lines.forEach((l, i) => setTimeout(() => this.toast(l[0], l[1]), 1200 + i * 4200));
   }
@@ -481,7 +479,7 @@ class Game {
     const t = T.TOOLS.find(x => x.id === id);
     if (!t) return;
     if (this.mode === 'novena' && t.unlock > this.tideIdx + 1) {
-      this.toast(t.name + ' unlocks at tide ' + T.roman(t.unlock) + '. Patience, jubilado.', 'bad');
+      this.toast(t.name + ' comes with tide ' + T.roman(t.unlock) + '.', 'bad');
       return;
     }
     this.tool = t;
@@ -622,9 +620,6 @@ class Game {
 
     window.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-      /* a card is up: it owns the keyboard. Escape still gets through, because
-         Escape is how you close it. */
-      if (self.overlayOpen() && e.key !== 'Escape') return;
       self.keys[e.code] = true;
       const k = e.key.toLowerCase();
       const tool = T.TOOLS.find(t => t.key === e.key);
@@ -639,7 +634,7 @@ class Game {
       }
       else if (k === 'r' && self.state === 'play' && self.phase === 'ebb' && self.mode === 'novena') self.startFlood();
       else if (k === 'r' && self.state === 'play' && self.mode === 'curve' && !(self.rugT > 0)) {
-        self.rugT = 30; self.toast('Rug rehearsal. Thirty seconds of high water — nothing on the chain moved. Yet.', 'bad');
+        self.rugT = 30; self.toast('Rehearsing a rug. Thirty seconds of high water — nothing on the chain moved.', 'bad');
       }
       else if (e.key === 'Tab') { e.preventDefault(); self.foldOpts(); }
       else if (k === 'p') self.setPhoto(!self.photo);
@@ -665,19 +660,8 @@ class Game {
     this.mouse.ndc[1] = 1 - (this.mouse.y / r.height) * 2;
   }
 
-  /* Is one of the full-bleed cards up? While one is it owns the keyboard and
-     nobody is working the beach. Without this the probe chip and the hint line
-     keep drawing underneath the trade dialog and print straight through its
-     glass, and a bare keypress behind it still switches tools or calls the
-     tide — you could start a rug rehearsal in the middle of a sell. */
-  overlayOpen() {
-    const s = this.screens;
-    for (let i = 0; i < s.length; i++) if (!s[i].classList.contains('hidden')) return true;
-    return false;
-  }
-
   canBuild() {
-    return (this.state === 'play') && !this.paused && !this.photo && !this.overlayOpen();
+    return (this.state === 'play') && !this.paused && !this.photo;
   }
 
   beginStroke() {
@@ -692,7 +676,7 @@ class Game {
       const M = this.mould, def = this.mouldDef();
       if (M.fill < 1) return;                       // keep holding — applyTool scoops
       if (this.pailShown() < 0.12) {
-        this.toast('Bag empty. Dig somewhere. Or buy more $SAND.', 'bad');
+        this.toast('There is no sand left to give. Dig somewhere.', 'bad');
         this.toolDown = false; return;
       }
       this.sim.setStamp(h.x, h.z, this.radius, this.towerH, this.merlons, h.y,
@@ -704,7 +688,7 @@ class Game {
       if (M.wet < def.wet - 0.14)
         this.toast('Too dry to hold its shape. Wet the sand before you fill.', 'bad');
       else if (M.wet > 0.93)
-        this.toast('That was soup. Too much liquidity, not enough conviction.', 'bad');
+        this.toast('That was soup. A little less water next time.', 'bad');
       M.fill = 0; M.wet = 0;
       this.toolDown = false;
       return;
@@ -900,7 +884,7 @@ class Game {
     this.show('#hud');
     this.layoutFor('sandbox');
     this.refreshLocks();
-    this.toast('Siesta mode. A whole day, no alarm, and nothing is coming for it.', 'lore');
+    this.toast('Slack water. A whole day, and nothing is coming for it.', 'lore');
     this.firstRun();
   }
 
@@ -920,7 +904,7 @@ class Game {
     this.show('#hud');
     this.layoutFor('sandbox');
     this.refreshLocks();
-    this.toast('Infinite pensión. Nothing to dig for, nothing coming for it. Just build.', 'lore');
+    this.toast('Endless sand. Nothing to dig for, nothing coming for it.', 'lore');
     this.firstRun();
   }
 
@@ -931,19 +915,9 @@ class Game {
      curve, signed by your own wallet. pons.js does the reading.        */
   openCurvePick() {
     const P = T.Pons;
-    const q = new URLSearchParams(location.search).get('token');
-    /* launched: the club builds on $SAND and nothing else */
-    if (!(q && P.isAddr(q)) && T.SAND.live()) {
-      this.openOver('#curvePick');
-      $('#pickStatus').textContent = 'locking to $SAND…';
-      $('#pickAddr').value = T.SAND.address;
-      this.startCurve(T.SAND.address);
-      return;
-    }
     this.openOver('#curvePick');
     $('#pickFlood').textContent = Math.round(P.floodAt * 100) + '%';
-    $('#prelaunch').hidden = T.SAND.live();
-    $('#pickTitle').textContent = T.SAND.live() ? 'Which chart are we building on?' : 'Which chart are we practising on?';
+    const q = new URLSearchParams(location.search).get('token');
     const last = T.store.get('tw.pons.token', '');
     if (q && P.isAddr(q)) $('#pickAddr').value = q;
     else if (last) $('#pickAddr').value = last;
@@ -962,7 +936,7 @@ class Game {
       list = list.slice(0, 12);
       st.textContent = list.length ? 'pons v2 · factory ' + P.fmt.short(P.FACTORY_V2) + ' · latest launches, busiest first' : 'no recent launches found';
       ul.innerHTML = '';
-      if (!list.length) { ul.innerHTML = '<li class="dim">nothing off the factory lately — paste a CA</li>'; return; }
+      if (!list.length) { ul.innerHTML = '<li class="dim">nothing off the factory lately — paste an address</li>'; return; }
       list.forEach(l => {
         const li = document.createElement('li');
         li.innerHTML = '<b>' + esc(l.symbol) + '</b><span>' + esc(l.name || '') + '</span>' +
@@ -973,7 +947,7 @@ class Game {
       });
     }).catch(e => {
       st.textContent = 'could not read the chain: ' + (e.message || e);
-      ul.innerHTML = '<li class="dim">paste a CA instead</li>';
+      ul.innerHTML = '<li class="dim">paste a token address instead</li>';
     });
     function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
   }
@@ -981,7 +955,7 @@ class Game {
   async startCurve(addr) {
     const P = T.Pons;
     const st = $('#pickStatus');
-    if (!P.isAddr(addr)) { st.textContent = 'that is not a contract address'; return; }
+    if (!P.isAddr(addr)) { st.textContent = 'that is not a token address'; return; }
     st.textContent = 'asking the factory for its curve…';
     $('#pickGo').disabled = true;
     try {
@@ -1009,9 +983,7 @@ class Game {
     this.wireCurve();
     this.updateCurvePanel();
     this.unlockCodex('cx3');
-    this.toast((T.SAND.live() && P.state.token.toLowerCase() === T.SAND.address.toLowerCase()
-      ? '$SAND Beach. ' : 'Practice beach: $' + P.state.symbol + '. ') +
-      'The water sits at the last ' + P.windowMin + ' minutes’ high. Build.', 'lore');
+    this.toast('$' + P.state.symbol + ' — the water sits at the last ' + P.windowMin + ' minutes’ high. Build.', 'lore');
     this.firstRun();
   }
 
@@ -1021,7 +993,7 @@ class Game {
     const P = T.Pons, self = this;
     $('#pConnect').onclick = () => {
       self.audio.ui(true);
-      P.connect().then(() => self.toast('gm ' + P.fmt.short(P.state.account) + ' — wallet on Robinhood Chain.', 'good'))
+      P.connect().then(() => self.toast('Wallet on Robinhood Chain: ' + P.fmt.short(P.state.account), 'good'))
         .catch(e => self.toast(e.message || String(e), 'bad'));
     };
     $('#pBuy').onclick = () => self.openTrade('buy');
@@ -1032,25 +1004,24 @@ class Game {
     P.on('trade', t => {
       if (self.mode !== 'curve') return;
       if (t.side === 'sell') {
-        /* a sell an eighth of the graduation threshold deep is a full wave */
-        self.splash = Math.min(1.5, self.splash + T.clamp(t.quote / Math.max(P.state.thresholdF || 1, 1e-9) * 8, 0.25, 1.0));
+        self.splash = Math.min(1.5, self.splash + T.clamp(t.quote * 40, 0.25, 1.0));
         self.audio.bell(147, 0.08, 2.4);
-        self.toast('Paper hands: ' + P.fmt.q(t.quote) + ' out. A wave comes in.', 'bad');
+        self.toast('Sold: ' + P.fmt.eth(t.quote) + ' out. A wave comes in.', 'bad');
       } else {
         self.audio.bell(294, 0.06, 2.0);
-        self.toast('Someone aped ' + P.fmt.q(t.quote) + '. The water draws back.', 'good');
+        self.toast('Bought: ' + P.fmt.eth(t.quote) + ' in. The water draws back.', 'good');
       }
       self.feedLine(t);
     });
     P.on('graduated', () => {
       if (self.mode !== 'curve') return;
       self.audio.bell(220, 0.12, 5.5); setTimeout(() => self.audio.bell(330, 0.10, 6), 700);
-      self.toast('Graduated. The pool is locked, the sea goes slack, the club is retired.', 'lore');
+      self.toast('Graduated. The pool is locked; the sea goes slack.', 'lore');
     });
     P.on('error', m => { if (self.mode === 'curve' && !self.errToasted) { self.errToasted = true; self.toast('Chain read failed: ' + m, 'bad'); } });
     P.on('update', () => { self.errToasted = false; if (self.mode === 'curve') self.updateCurvePanel(); });
     P.on('mytrade', t => {
-      self.toast((t.side === 'buy' ? 'Aped. More sand in the bag.' : 'Sold. The bag is lighter. Jubilado no more?'), t.side === 'buy' ? 'good' : '');
+      self.toast((t.side === 'buy' ? 'Bought. More sand in the pail.' : 'Sold. The pail is lighter.'), t.side === 'buy' ? 'good' : '');
     });
   }
 
@@ -1058,7 +1029,7 @@ class Game {
     const P = T.Pons, f = $('#pFeed');
     const d = document.createElement('div');
     d.className = 'fl ' + t.side;
-    d.textContent = (t.side === 'buy' ? '▲ ' : '▼ ') + P.fmt.q(t.quote) + ' · ' + P.fmt.big(BigInt(Math.round(t.tokens)) * 10n ** BigInt(P.state.decimals)) + ' ' + P.state.symbol;
+    d.textContent = (t.side === 'buy' ? '▲ ' : '▼ ') + P.fmt.eth(t.quote) + ' · ' + P.fmt.big(BigInt(Math.round(t.tokens)) * 10n ** BigInt(P.state.decimals)) + ' ' + P.state.symbol;
     f.prepend(d);
     while (f.children.length > 4) f.lastChild.remove();
   }
@@ -1066,8 +1037,7 @@ class Game {
   updateCurvePanel() {
     const P = T.Pons, S = P.state;
     $('#pSym').textContent = S.symbol.length > 7 ? S.symbol.slice(0, 7) : S.symbol;
-    const isSand = T.SAND.live() && S.token.toLowerCase() === T.SAND.address.toLowerCase();
-    $('#pName').textContent = isSand ? T.SAND.name : 'practice · ' + (S.name || P.fmt.short(S.token));
+    $('#pName').textContent = S.name || P.fmt.short(S.token);
     $('#pName').title = S.token;
     const ph = $('#pPhase');
     const k = this.curveFlood || 0;
@@ -1086,7 +1056,7 @@ class Game {
     $('#pCurveFill').style.width = Math.round(S.progress * 100) + '%';
     $('#pCurveText').textContent = S.graduated ? 'graduated' : P.fmt.pct(S.progress);
     $('#pCurveHint').textContent = S.graduated ? 'Uniswap v4 · locked' :
-      (S.threshold > 0n ? P.fmt.qb(S.realQuote) + ' of ' + P.fmt.qb(S.threshold) : 'to graduation');
+      (S.threshold > 0n ? P.fmt.eth(Number(S.realQuote) / 1e18) + ' of ' + P.fmt.eth(Number(S.threshold) / 1e18) : 'to graduation');
     const bag = $('#pBag');
     if (S.account) {
       const m3 = this.bagSand();
@@ -1095,8 +1065,6 @@ class Game {
         '<span class="dim">' + P.fmt.short(S.account) + '</span>';
     }
     $('#pLink').href = P.tokenUrl();
-    /* a practice beach buys someone else's coin — the button must say which */
-    $('#pBuy').textContent = 'Buy $' + (S.symbol.length > 10 ? S.symbol.slice(0, 10) : S.symbol);
     $('#pBuy').disabled = !!S.graduated; $('#pSell').disabled = !!S.graduated;
     if (this.tradeOpen) this.quoteTrade();
   }
@@ -1105,24 +1073,21 @@ class Game {
      whale still has to dig a moat */
   bagSand() {
     const f = T.Pons.state.bagFrac || 0;
-    return Math.min(T.SAND.bagSandMax, f * 1000 * T.SAND.bagSandPerMille);
+    return Math.min(40, f * 4000);
   }
 
   openTrade(side) {
     const P = T.Pons, S = P.state;
-    if (!P.hasWallet()) { this.toast('No wallet in this browser — open pons instead: ' + P.tokenUrl(), 'bad'); return; }
-    if (S.graduated) { this.toast('Graduated — trade it in the locked pool on pons.', ''); return; }
+    if (!P.hasWallet()) { this.toast('No wallet in this browser — open ' + P.LAUNCHPAD + ' instead.', 'bad'); return; }
+    if (S.graduated) { this.toast('Graduated — trade it in the pool on pons.', ''); return; }
     this.audio.ui(true);
     this.tradeSide = side; this.tradeOpen = true;
-    $('#tradeNum').textContent = side === 'buy' ? 'BUY $' + S.symbol : 'SELL $' + S.symbol;
+    $('#tradeNum').textContent = side === 'buy' ? 'BUY SAND' : 'SELL SAND';
     $('#tradeTitle').textContent = side === 'buy' ? 'Buy $' + S.symbol + ' on the curve' : 'Sell $' + S.symbol + ' on the curve';
-    $('#tradeUnit').textContent = side === 'buy' ? S.quoteSymbol : S.symbol;
+    $('#tradeUnit').textContent = side === 'buy' ? (S.isNative ? 'ETH' : 'WETH') : S.symbol;
     $('#tradeAmt').value = '';
     const qk = $('#tradeQuick'); qk.innerHTML = '';
-    /* sensible bites of the quote asset: a slice of the graduation threshold */
-    const th = S.thresholdF || (S.isNative ? 4 : 8000);
-    const bite = f => { const v = th * f; return v >= 10 ? String(Math.round(v)) : v >= 1 ? v.toFixed(1) : v.toPrecision(2); };
-    const quick = side === 'buy' ? [bite(0.001), bite(0.0025), bite(0.01), bite(0.025)] : ['25%', '50%', '100%'];
+    const quick = side === 'buy' ? ['0.005', '0.01', '0.05', '0.1'] : ['25%', '50%', '100%'];
     quick.forEach(v => {
       const b = document.createElement('button'); b.textContent = v;
       b.onclick = () => {
@@ -1149,10 +1114,10 @@ class Game {
       if (this.tradeSide === 'buy') {
         const wei = P.toWei(v, S.quoteDecimals);
         const q = await P.quoteBuy(wei);
-        const per = Number(wei) / 10 ** S.quoteDecimals / (Number(q.tokensOut) / 10 ** S.decimals);
+        const per = Number(wei) / 1e18 / (Number(q.tokensOut) / 10 ** S.decimals);
         out.innerHTML = '≈ <b>' + P.fmt.big(q.tokensOut) + ' ' + S.symbol + '</b>' +
           ' · ' + P.fmt.pct(Number(q.tokensOut) / Number(S.supply)) + ' of supply' +
-          ' · +' + Math.min(T.SAND.bagSandMax, Number(q.tokensOut) / Number(S.supply) * 1000 * T.SAND.bagSandPerMille).toFixed(1) + ' m³' +
+          ' · +' + Math.min(40, Number(q.tokensOut) / Number(S.supply) * 4000).toFixed(1) + ' m³' +
           '<br><span class="dim">fee ' + (Number(S.feeBps) / 100) + '% · creator ' + (Number(S.creatorTaxBps) / 100) + '%' +
           (q.snipeBps > 0n ? ' · <b class="bad">snipe tax ' + (Number(q.snipeBps) / 100).toFixed(1) + '% — wait a few seconds</b>' : '') +
           (q.capped ? ' · <b>fills the curve — the rest is refunded</b>' : '') +
@@ -1161,7 +1126,7 @@ class Game {
         const wei = P.toWei(v, S.decimals);
         if (wei > S.balance) { out.innerHTML = '<span class="bad">that is more than your bag holds</span>'; return; }
         const q = P.quoteSell(wei);
-        out.innerHTML = '≈ <b>' + P.fmt.qb(q.quoteOut) + '</b>' +
+        out.innerHTML = '≈ <b>' + P.fmt.eth(Number(q.quoteOut) / 10 ** S.quoteDecimals) + '</b>' +
           '<br><span class="dim">fee ' + (Number(S.feeBps) / 100) + '% · creator ' + (Number(S.creatorTaxBps) / 100) + '% · 3% slippage</span>';
       }
     } catch (e) { out.innerHTML = '<span class="bad">' + (e.message || e) + '</span>'; }
@@ -1172,7 +1137,7 @@ class Game {
     const v = $('#tradeAmt').value.trim();
     if (!v || isNaN(+v) || +v <= 0) return;
     const go = $('#tradeGo');
-    go.disabled = true; go.textContent = 'Sign in the wallet…';
+    go.disabled = true; go.textContent = 'Waiting for the wallet…';
     try {
       if (this.tradeSide === 'buy') await P.buy(P.toWei(v, S.quoteDecimals), 300);
       else await P.sell(P.toWei(v, S.decimals), 300);
@@ -1182,7 +1147,7 @@ class Game {
       const m = (e && (e.message || e.data && e.data.message)) || String(e);
       $('#tradeQuote').innerHTML = '<span class="bad">' + m.slice(0, 220) + '</span>';
     }
-    go.disabled = false; go.textContent = 'Sign it · LFG';
+    go.disabled = false; go.textContent = 'Sign it';
   }
 
   beginTide() {
@@ -1214,7 +1179,7 @@ class Game {
     this.layoutFor('novena');
     this.refreshLocks();
     this.renderObjectives();
-    this.toast('The water is out. Build. The Americans are still in a meeting.', 'lore');
+    this.toast('The water is out. Work.', 'lore');
     this.firstRun();
   }
 
@@ -1250,7 +1215,7 @@ class Game {
     this.floodLen = this.tide().flood;
     this.worthAtFlood = Math.max(0, (this.sim.metrics.worth - Math.max(this.worthBase, 0)) * SCORE_SCALE);
     this.audio.bell(147, 0.13, 5.0);
-    this.toast('The tide has turned. Red candle incoming.', 'bad');
+    this.toast('The tide has turned.', 'bad');
     $('#tidePhase').classList.add('flood');
     $('.clockbar').classList.add('flood');
   }
@@ -1279,10 +1244,10 @@ class Game {
     const g = T.grade(stats);
 
     $('#sGrade').textContent = g.g;
-    $('#sTitle').textContent = this.tideIdx === 8 ? 'The ninth water has gone back out. You are retired.' : 'The water has gone back out.';
+    $('#sTitle').textContent = this.tideIdx === 8 ? 'The ninth water has gone back out.' : 'The water has gone back out.';
     $('#sLine').textContent = g.line;
     $('#sStats').innerHTML =
-      cell('Pensión', stats.worth) +
+      cell('Remembrance', stats.worth) +
       cell('Kept', Math.round(kept * 100) + '%') +
       cell('Packed', stats.packed.toFixed(1) + ' m³') +
       cell('Highest', (stats.peakAbove).toFixed(2) + ' m');
@@ -1308,7 +1273,7 @@ class Game {
   }
 
   targetFor(t) {
-    const o = t.objs.find(x => /Pensión/.test(x.text));
+    const o = t.objs.find(x => /Remembrance/.test(x.text));
     if (!o) return 1000;
     const m = /(\d+)/.exec(o.text);
     return m ? +m[1] : 1000;
@@ -1321,34 +1286,8 @@ class Game {
     this.beginTide();
   }
 
-  /* the footer of the menu says where $SAND is: a CA, or not yet */
-  refreshLaunchLine() {
-    const el = $('#menuCA'), sub = $('#curveSub');
-    if (!el) return;
-    if (T.SAND.live()) {
-      const a = T.SAND.address;
-      el.innerHTML = 'CA <a href="' + T.Pons.LAUNCHPAD + '/' + a + '" target="_blank" rel="noopener" title="' + a + '">' +
-        a.slice(0, 6) + '…' + a.slice(-4) + '</a> · pons';
-      if (sub) sub.textContent = 'The chart is the tide. Every sell brings the water in; your $SAND bag is your sand.';
-    } else {
-      let line = '$SAND · not launched yet';
-      if (T.SAND.launchAt) {
-        const ms = Date.parse(T.SAND.launchAt) - Date.now();
-        if (ms > 0) {
-          const h = Math.floor(ms / 3.6e6), m = Math.floor(ms % 3.6e6 / 6e4);
-          line = '$SAND launches in ' + (h >= 48 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : h + 'h ' + m + 'm');
-        } else line = '$SAND · launching';
-      }
-      el.textContent = line;
-      if (sub) sub.textContent = 'Not launched yet — practise on any pons chart. On launch day the beach locks to $SAND.';
-    }
-    const links = [['x', 'X'], ['telegram', 'TG'], ['site', 'site']].filter(l => T.SAND[l[0]]);
-    if (links.length) el.innerHTML += links.map(l => ' <span class="dot">·</span> <a href="' + T.SAND[l[0]] + '" target="_blank" rel="noopener">' + l[1] + '</a>').join('');
-  }
-
   toMenu() {
     if (this.mode === 'curve') { T.Pons.stop(); this.tradeOpen = false; this.hide('#trade'); }
-    this.refreshLaunchLine();
     this.state = 'menu';
     this.screenUnder = null;
     this.hide('#hud'); this.hide('#summary'); this.hide('#brief'); this.hide('#pause');
@@ -1364,7 +1303,7 @@ class Game {
   setPaused(p) {
     this.paused = p;
     $('#pause').classList.toggle('hidden', !p);
-    if (p) $('#pauseSub').textContent = this.mode === 'curve' ? 'The chart does not take a siesta. The sand does.' : this.phase === 'flood' ? 'The water is waiting too.' : 'The beach waits.';
+    if (p) $('#pauseSub').textContent = this.mode === 'curve' ? 'The chart does not pause. The sand does.' : this.phase === 'flood' ? 'The water is waiting too.' : 'The shore waits.';
   }
 
   /* ─────────────────────── codex ─────────────────────── */
@@ -1373,7 +1312,7 @@ class Game {
     if (this.save.codex.indexOf(id) < 0) {
       this.save.codex.push(id);
       const e = T.CODEX.find(c => c.id === id);
-      if (e) this.toast('Primer: “' + e.title + '”', 'lore');
+      if (e) this.toast('Codex: “' + e.title + '”', 'lore');
       T.store.set('tw.save', this.save);
     }
   }
@@ -1394,7 +1333,7 @@ class Game {
       list.appendChild(li);
     });
     $('#codexRead').innerHTML = '<div class="cr-empty">' +
-      (unlocked.length ? 'Select an entry.' : 'Nothing yet. The beach tells you things as you work.') + '</div>';
+      (unlocked.length ? 'Select an entry.' : 'Nothing yet. The shore tells you things as you work.') + '</div>';
     this.openOver('#codex');
   }
 
@@ -1421,7 +1360,7 @@ class Game {
         d: btoa(bin), res: D, tide: this.tideIdx + 1,
         props: this.props.list.map(p => [p.type, p.x, p.y, p.z, p.rot, p.scale])
       });
-      this.toast('Castle saved. Not your keys, still your castle.', 'good');
+      this.toast('Castle saved.', 'good');
     } catch (e) { this.toast('Could not save (storage blocked).', 'bad'); }
   }
 
@@ -1636,7 +1575,7 @@ class Game {
     } else if (t.mode === 0) {
       s = 'click to set down a ' + T.ADORN[this.adornIdx].name.toLowerCase();
     } else if ((t.moves > 0) && this.pailShown() <= 0.02) {
-      s = 'your bag is empty — dig somewhere you want a hole'; cls = 'bad';
+      s = 'your pail is empty — dig somewhere you want a hole'; cls = 'bad';
     } else if (t.mode === 4 && h.valid && h.m > 0.9) {
       s = 'that is already soaked — any more and it runs'; cls = 'bad';
     } else if (t.mode === 1 && h.valid && h.depth < 0.05) {
@@ -1802,7 +1741,7 @@ class Game {
       this.pail = Math.max(0, PAIL_START + bonus + (this.sim.baseTotal - this.sim.metrics.total));
       if (prevPail > 0.02 && this.pailShown() <= 0.02) {
         this.flags.pailEmpty = true;
-        this.toast('Bag empty. Dig somewhere you want a hole.', 'bad');
+        this.toast('Pail empty. Dig somewhere you want a hole.', 'bad');
       }
       const wp = this.sim.metrics.worth;
       if (this.worthPeak - wp > 0.9 && this.phase === 'flood') {
@@ -1975,7 +1914,7 @@ class Game {
       this.wantShot = false;
       try {
         const a = document.createElement('a');
-        a.download = 'jubilados-club-' + Date.now() + '.png';
+        a.download = 'tidewright-' + Date.now() + '.png';
         a.href = this.canvas.toDataURL('image/png');
         a.click();
         this.toast('Captured.', 'good');
@@ -2034,8 +1973,6 @@ window.addEventListener('load', () => {
     const g = new TW.Game();
     window.__tw = g;
     if (!g.gl) return;
-    g.refreshLaunchLine();
-    setInterval(() => { if (g.state === 'menu') g.refreshLaunchLine(); }, 30000);
     setTimeout(() => {
       document.getElementById('loading').classList.add('hidden');
       document.getElementById('menu').classList.remove('hidden');
