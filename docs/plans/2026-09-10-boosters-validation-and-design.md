@@ -254,18 +254,15 @@ TokenLaunched → curve reads (6 s poll, batched) → position health locally
 computed with the same formulas the contract uses → Chainlink for horizon →
 StateView for planets → our contracts' events for tanks, positions, deaths.
 
-## 6. Open decisions (for Dani)
+## 6. Decisions
 
-1. **Physical (A) first, hybrid (C) later — agree?** The alternative is to
-   go straight to synthetic and accept the oracle problem.
-2. **Leverage menu.** Curve: 2× only? Planets: 2×/3×/5× gated by depth?
-3. **Graveyard draw randomness.** Options: (a) hash of the next pons
-   `CurveCompleted` tx on the chain (cheap, sequencer-trusting), (b) commit-
-   reveal by ticket holders, (c) no draw at all: pro-rata payout of the dead
-   tank to burners, which keeps the "no randomness" rule of the earlier
-   TIDEWRIGHT design.
-4. **Launch flow.** Do we launch tokens through our own flow so the tank is
-   the recipient from block one, or only offer the `transferCreatorFeeRecipient`
-   opt-in? The former needs `canLaunch(ourRouter)`.
-5. **Who runs keepers.** Liquidations are permissionless with a bounty; do we
-   also run one?
+| Question | Decision |
+|---|---|
+| Leverage model | **Physical first (A), hybrid (C) later.** Decided by Dani on 2026-09-10. |
+| Leverage menu | Default proposal: curve 2× only; planets 2×/3×/5×, each tier unlocked by quote-side depth floors. Tunable constants, not architecture. |
+| Graveyard draw | Default proposal: no randomness. Burners of a dead token split its tank pro rata, keeping the "money never follows a forgeable number" rule of the earlier design. A raffle can be added later if wanted. |
+| Launch flow | Default proposal: opt-in via `transferCreatorFeeRecipient` first; add our own create flow once `canLaunch(ourRouter)` is confirmed. |
+| Keepers | Liquidations permissionless with a bounty from the spread; we run one keeper as a floor. |
+
+Defaults above are proposals, not confirmed; override any of them before the
+implementation plan is written.
