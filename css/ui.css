@@ -187,11 +187,13 @@ kbd{
 .cr-empty{color:#5d6773;font-style:italic;font-family:var(--f-disp)}
 
 /* ---------------------------------------------------------------- settings */
-/* These three are read *over* something live — the shore, another card, or a
+/* These are read *over* something live — the shore, another card, or a
    running game with its whole HUD lit underneath. .screen paints nothing, so
    without their own darkness everything beneath prints straight through the
-   glass and you appear to be looking at two menus at once. */
-#settings,#codex,#howto{background:rgba(4,6,10,.80)}
+   glass and you appear to be looking at two menus at once. The trade dialog
+   needs it most: it is the only card opened with the workbench, the hint line
+   and the probe chip all still lit. */
+#settings,#codex,#howto,#trade,#curvePick{background:rgba(4,6,10,.80)}
 
 .set-card{width:min(560px,94vw);max-height:86vh;overflow:auto}
 .set-grid{display:flex;flex-direction:column;gap:14px}

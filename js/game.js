@@ -248,6 +248,8 @@ class Game {
   /* ─────────────────────── interface ─────────────────────── */
   initUI() {
     const self = this;
+    /* every full-bleed card, looked up once — overlayOpen() asks every frame */
+    this.screens = $$('.screen');
 
     /* palette */
     const pal = $('#palette');
@@ -620,6 +622,9 @@ class Game {
 
     window.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      /* a card is up: it owns the keyboard. Escape still gets through, because
+         Escape is how you close it. */
+      if (self.overlayOpen() && e.key !== 'Escape') return;
       self.keys[e.code] = true;
       const k = e.key.toLowerCase();
       const tool = T.TOOLS.find(t => t.key === e.key);
@@ -660,8 +665,19 @@ class Game {
     this.mouse.ndc[1] = 1 - (this.mouse.y / r.height) * 2;
   }
 
+  /* Is one of the full-bleed cards up? While one is it owns the keyboard and
+     nobody is working the beach. Without this the probe chip and the hint line
+     keep drawing underneath the trade dialog and print straight through its
+     glass, and a bare keypress behind it still switches tools or calls the
+     tide — you could start a rug rehearsal in the middle of a sell. */
+  overlayOpen() {
+    const s = this.screens;
+    for (let i = 0; i < s.length; i++) if (!s[i].classList.contains('hidden')) return true;
+    return false;
+  }
+
   canBuild() {
-    return (this.state === 'play') && !this.paused && !this.photo;
+    return (this.state === 'play') && !this.paused && !this.photo && !this.overlayOpen();
   }
 
   beginStroke() {
@@ -1079,6 +1095,8 @@ class Game {
         '<span class="dim">' + P.fmt.short(S.account) + '</span>';
     }
     $('#pLink').href = P.tokenUrl();
+    /* a practice beach buys someone else's coin — the button must say which */
+    $('#pBuy').textContent = 'Buy $' + (S.symbol.length > 10 ? S.symbol.slice(0, 10) : S.symbol);
     $('#pBuy').disabled = !!S.graduated; $('#pSell').disabled = !!S.graduated;
     if (this.tradeOpen) this.quoteTrade();
   }
